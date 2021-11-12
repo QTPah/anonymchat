@@ -1,15 +1,13 @@
-const Protocol = require('./Protocol');
-
 class Packet {
-    protocol
-    args
+    prefix;
+    content;
     /**
-     * 
-     * @param {Protocol} protocol 
-     * @param {Array} args 
+     * @param {String} prefix 
+     * @param {String} content 
      */
-    constructor(protocol, args) {
-        this.protocol = protocol; this.args = args;
+    constructor(prefix, content) {
+        this.content = content;
+        this.prefix = prefix;
     }
 }
 
