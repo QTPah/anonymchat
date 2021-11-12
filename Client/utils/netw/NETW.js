@@ -12,6 +12,8 @@ class con extends EventEmitter {
      */
     constructor(socket) {
 
+        super();
+
         /**
          * @param {Packet} p 
          */
