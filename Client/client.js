@@ -1,23 +1,33 @@
 process.stdin.resume();
 
-const api = require('./api');
+// Get the AnonymChat API
+const api = require('./utils/API');
 
+// Create a new Client
 const client = new api.Client(process.argv[2]);
 
-const readline = require('readline');
+// Create a new Readline interface
+const rl = require('readline').createInterface(process.stdin, process.stdout);
 
-const rl = readline.createInterface(process.stdin, process.stdout);
+// Create a new EventStream
+const events = require('events');
+const event = new events();
+
+/**
+ * Registered Events:
+ *  - connected
+ */
 
 function prompt() {
-    rl.question(`<${client.name}> `, (preMessage) => {
-        if(preMessage) {
-            client.con.write(`msg¬ ${client.id} ${preMessage}`);
+    rl.question(`<${client.name}> `, message => {
+        if(message) {
+            client.con.write(`msg¬ ${client.id} ${message}`);
         }
-        prompt();
+        prompt(); // Loops the function that after a message was sent a new prompt appears.
     });
 }
 
-function connect() {
+function promptForConnection() {
     console.clear();
     console.log('\n         Welcome to anonymchat!\n');
     rl.question('   Enter host: ', host=>{
@@ -28,14 +38,12 @@ function connect() {
     });
 }
 
-function auth() {
+function promptForUsername() {
     console.clear();
     console.log('\n     Welcome to da chat!!\n');
     rl.question('       Enter your username: ', (answer)=>{
         client.name = answer;
-    
         client.con.write(`auth1¬ ${client.name}`);
-    
         console.clear();
     });
 }
@@ -55,6 +63,8 @@ function auth() {
  * 
  */
 
+
+// Will be executed when it's connected
 function connected() {
     client.con.on('data', (buffer) => {
         let data = buffer.toString('utf8');
@@ -86,29 +96,6 @@ function connected() {
         }
     });
 }
-
-
-
-function onExit() {
-    if(client.con) {
-        client.con.destroy();
-    }
-}
-
-//do something when app is closing
-process.on('exit', onExit);
-process.on('SIGQUIT', onExit)
-
-//catches ctrl+c event
-process.on('SIGINT', onExit);
-
-// catches "kill pid" (for example: nodemon restart)
-process.on('SIGUSR1', onExit);
-process.on('SIGUSR2', onExit);
-
- 
-//catches uncaught exceptions
-process.on('uncaughtException', onExit);
 
 process.title = 'Anonymchat.';
 

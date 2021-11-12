@@ -118,14 +118,8 @@ server.handleClient(
     });
 });
 
-if(require('./modules/verifyer').verfiy().v) {
-    let config = JSON.parse(fs.readFileSync('./config/config.json', 'utf8'));
-    const PORT = config.port;
 
-    server.listen(PORT, ()=>console.log(`Anonymchat server runs on 127.0.0.1:${PORT}`));
-} else {
-    console.log(require('./modules/verifyer').verfiy().e);
-}
+let config = JSON.parse(fs.readFileSync('./config/config.json', 'utf8'));
+const PORT = config.port;
 
-
-
+server.listen(PORT, ()=>console.log(`Anonymchat server runs on 127.0.0.1:${PORT}`));

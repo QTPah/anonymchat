@@ -19,8 +19,6 @@ class Client extends EventEmitter {
             this.con = client;
             return client;
         }
-        
-        
     }
 }
 
