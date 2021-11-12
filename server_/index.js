@@ -2,6 +2,8 @@ const net = require('net');
 
 const api = require('./utils/API');
 
+const fs = require('fs');
+
 const nph = require('./utils/netPacketHandler');
 
 let server = new api.Server();
@@ -116,8 +118,14 @@ server.handleClient(
     });
 });
 
-const config = require('./config/config.json');
+if(require('./modules/verifyer').verfiy().v) {
+    let config = JSON.parse(fs.readFileSync('./config/config.json', 'utf8'));
+    const PORT = config.port;
 
-const PORT = config.port;
+    server.listen(PORT, ()=>console.log(`Anonymchat server runs on 127.0.0.1:${PORT}`));
+} else {
+    console.log(require('./modules/verifyer').verfiy().e);
+}
 
-server.listen(PORT, ()=>console.log('Listening!'));
+
+
